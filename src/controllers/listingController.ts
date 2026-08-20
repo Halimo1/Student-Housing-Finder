@@ -7,7 +7,7 @@ export async function createListing(req: Request, res: Response) {
     try {
         const { location, price, roomsAvailable, description } = req.body;
         if (!location || !price || !roomsAvailable || !description) {
-            return res.status(401).json({ message: `All fields must by provided` });
+            return res.status(400).json({ message: `All fields must by provided` });
         }
         const newListing = await Listing.create({
             location,
@@ -25,10 +25,13 @@ export async function createListing(req: Request, res: Response) {
 //by lister only
 export async function updateListing(req: Request, res: Response) {
     try {
-        const id = req.params;
+        const {id} = req.params;
         const listing = await Listing.findById(id);
         if(!listing){
-            return res.status(401).json({ message: `Listing not found` });
+            return res.status(404).json({ message: `Listing not found` });
+        }
+        if (listing.ownerId !== req.user!.id) {
+            return res.status(403).json({ message: "Unauthorized to update this listing" });
         }
         const updateListing = await Listing.findByIdAndUpdate(id, req.body, {
             new: true,          // يرجع البيانات الجديدة بعد التحديث لتخزينها في updatedListing
@@ -43,10 +46,13 @@ export async function updateListing(req: Request, res: Response) {
 //by lister only
 export async function deleteListing(req: Request, res: Response) {
     try {
-        const id = req.params;
+        const {id} = req.params;
         const listing = await Listing.findById(id);
         if(!listing){
-            return res.status(401).json({ message: `Listing not found` });
+            return res.status(404).json({ message: `Listing not found` });
+        }
+        if (listing.ownerId !== req.user!.id) {
+            return res.status(403).json({ message: "Unauthorized to update this listing" });
         }
         await Listing.findByIdAndDelete(id);
         return res.status(200).json({message: "Listing deleted successfully"});
