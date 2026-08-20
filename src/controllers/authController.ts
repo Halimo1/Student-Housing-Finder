@@ -14,7 +14,7 @@ export async function signUp(req: Request, res: Response) {
       return res.status(400).json({message: "Email is already registered"});
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({
+    await User.create({
       fullName,
       email,
       password: hashedPassword,
@@ -30,7 +30,7 @@ export async function signUp(req: Request, res: Response) {
 }
 
 const maxAge = 60*60;
-export async function login(req: Request, res: Response) {
+export async function signIn(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
 
@@ -61,7 +61,7 @@ export async function login(req: Request, res: Response) {
         status: 200,
         data: user.fullName
     })
-  } catch (error) {
-    return res.status(500).json({ message: 'Error logging in', error });
+  } catch{
+    return res.status(500).json({ error: 'Error logging in'});
   }
 }

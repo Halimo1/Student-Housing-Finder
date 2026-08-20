@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { Listing } from "../models/Listing";
 import { ListingRequest, RequestStatus } from '../models/InterestRequest';
 
-//by lister only
 export async function createListing(req: Request, res: Response) {
     try {
         const { location, price, roomsAvailable, description } = req.body;
@@ -22,7 +21,6 @@ export async function createListing(req: Request, res: Response) {
     }
 }
 
-//by lister only
 export async function updateListing(req: Request, res: Response) {
     try {
         const {id} = req.params;
@@ -43,7 +41,6 @@ export async function updateListing(req: Request, res: Response) {
     }
 }
 
-//by lister only
 export async function deleteListing(req: Request, res: Response) {
     try {
         const {id} = req.params;
@@ -61,15 +58,13 @@ export async function deleteListing(req: Request, res: Response) {
     }
 }
 
-//for seeker and public
 export async function getAllListing(req: Request, res: Response) {
     try {
         const {location, mnPrice, mxPrice, roomsAvailable, status} = req.query;
         const filter:any = {};
         if(status){
-            //pending or accepted or declined
-            const litsting = await ListingRequest.find({status: status as RequestStatus}).select("listingId");
-            filter._id = {$in : litsting.map((r)=> r.listingId)};
+            const litsting = await ListingRequest.find({status: status as RequestStatus}).distinct('listingId');
+            filter._id = {$in : litsting};
         }
         if(location) {
             filter.location = location;

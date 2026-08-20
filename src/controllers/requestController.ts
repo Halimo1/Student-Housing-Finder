@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Listing } from "../models/Listing";
-import { ListingRequest, RequestStatus } from '../models/InterestRequest';
+import { ListingRequest } from '../models/InterestRequest';
 
 export async function sendRequest(req: Request, res: Response) {
     try {
