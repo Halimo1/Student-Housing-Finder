@@ -2,7 +2,6 @@ import { Router } from "express"
 import { getListingRequest, cancelRequest, getMyRequest, sendRequest, updateRequestStatus} from '../controllers/requestController'
 import { authMiddleware } from '../middlewares/authMiddleware'
 import { roleMiddleware } from '../middlewares/roleMiddleware'
-import { request } from "node:http";
 
 export const requestRouter = Router();
 
