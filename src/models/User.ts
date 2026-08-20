@@ -5,6 +5,39 @@ export enum UserRole {
     SEEKER = "Seeker",
 };
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     userSchema:
+ *       type: object
+ *       required:
+ *         - fullName
+ *         - email
+ *         - password
+ *         - role
+ *       properties:
+ *         fullName:
+ *           type: string
+ *           description: The full name of user
+ *         email:
+ *           type: string
+ *           description: The email
+ *         password:
+ *           type: string
+ *           format: password
+ *           description: The password
+ *         role:
+ *           type: string
+ *           enum: [admin, user]
+ *           description: The role of user
+ *       example:
+ *         fullName: "Youseef Ezzat Mohamed Ahmed"
+ *         email: "user@example.com"
+ *         password: "12345678"
+ *         role: "admin"
+ */
+
 const userSchema = new mongoose.Schema({
     fullName: {
         type: String,

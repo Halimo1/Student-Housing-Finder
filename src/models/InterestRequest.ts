@@ -11,6 +11,10 @@ const RequestSchema = new mongoose.Schema({
         type: String, 
         required: true,
     },
+    listerId: {
+        type: String, 
+        required: true, 
+    },
     seekerId: {
         type: String,
         required: true,

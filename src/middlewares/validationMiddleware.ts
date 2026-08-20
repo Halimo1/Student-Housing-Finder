@@ -38,6 +38,8 @@ export const validateAuthInput = (req: Request, res: Response, next: NextFunctio
     next();
 };
 
+
+
 export const validateListingInput = (req: Request, res: Response, next: NextFunction) => {
     const { location, price } = req.body;
 

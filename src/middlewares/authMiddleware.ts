@@ -15,6 +15,10 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
             process.env.JWT_SECRET as string
         ) as JwtPayload;
 
+        if(!decoded){
+            return res.status(401).json({ message: "Not authenticated. No token provided." });
+        }
+
         req.user = { id: decoded.id, role: decoded.role };
         next();
     } catch (error) {
