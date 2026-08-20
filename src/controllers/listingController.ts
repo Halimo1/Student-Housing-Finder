@@ -34,8 +34,8 @@ export async function updateListing(req: Request, res: Response) {
             return res.status(403).json({ message: "Unauthorized to update this listing" });
         }
         const updateListing = await Listing.findByIdAndUpdate(id, req.body, {
-            new: true,          // يرجع البيانات الجديدة بعد التحديث لتخزينها في updatedListing
-            runValidators: true // يتأكد أن البيانات الممررة في req.body مطابقة لشروط الـ Listing Schema
+            new: true,         
+            runValidators: true
         });
         return res.status(200).json({message: "Listing update successfully", data: updateListing});
     }catch{
