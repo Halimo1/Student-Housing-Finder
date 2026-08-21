@@ -84,7 +84,7 @@ requestRouter.get('/showMyRequest',authMiddleware,roleMiddleware("Seeker"),getMy
  */
 
 
-requestRouter.post('/sendRequest',authMiddleware,roleMiddleware("Lister"),sendRequest)
+requestRouter.post('/sendRequest', authMiddleware, sendRequest);
 
 
 /**
@@ -154,4 +154,4 @@ requestRouter.put('/updateRequestStatus/:id',authMiddleware,roleMiddleware("List
  */
 
 
-requestRouter.delete('/cancelRequest',authMiddleware,roleMiddleware("Seeker"),cancelRequest)
+requestRouter.delete('/cancelRequest/:id',authMiddleware,roleMiddleware("Seeker"),cancelRequest)

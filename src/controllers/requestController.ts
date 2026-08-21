@@ -6,8 +6,12 @@ export async function sendRequest(req: Request, res: Response) {
     try {
         const { listingId } = req.body;
         const seekerId = req.user!.id;
+        const mylisting = await Listing.findById(listingId);
         if (!listingId) {
             return res.status(400).json({ message: `Listing id must by provided` });
+        }
+        if (mylisting?.ownerId.toString() === req.user!.id) {
+            return res.status(400).json({ message: "You cannot request your own listing!" });
         }
         const request = await ListingRequest.create({
             listingId,

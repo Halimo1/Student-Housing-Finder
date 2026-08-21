@@ -27,7 +27,7 @@ import mongoose from "mongoose";
  *           type: string
  *           description: Description of house
  *         ownerId:
- *           type: number
+ *           type: string
  *           description: The id of owner
  *       example:
  *         location: "El Obour"
