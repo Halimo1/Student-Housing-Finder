@@ -49,7 +49,17 @@ export async function deleteListing(req: Request, res: Response) {
             return res.status(404).json({ message: `Listing not found` });
         }
         if (listing.ownerId !== req.user!.id) {
-            return res.status(403).json({ message: "Unauthorized to update this listing" });
+            return res.status(403).json({ message: "Unauthorized to delete this listing" });
+        }
+        const acceptedRequest = await ListingRequest.findOne({
+            listingId: id as string,
+            status: RequestStatus.ACCEPTED
+        });
+
+        if (acceptedRequest) {
+            return res.status(400).json({
+                message: "Cannot delete listing because it has an accepted request",
+            });
         }
         await Listing.findByIdAndDelete(id);
         return res.status(200).json({message: "Listing deleted successfully"});
