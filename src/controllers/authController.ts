@@ -65,3 +65,8 @@ export async function signIn(req: Request, res: Response) {
     return res.status(500).json({ error: 'Error logging in'});
   }
 }
+
+export function signOut(req: Request, res: Response) { 
+  res.clearCookie("token");
+  return res.status(200).json({message: "Logged out successfully"});
+}
