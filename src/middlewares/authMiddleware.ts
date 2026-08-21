@@ -19,7 +19,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
             return res.status(401).json({ message: "Not authenticated. No token provided." });
         }
 
-        req.user = { id: decoded.id, role: decoded.role };
+        req.user = { id: decoded.id, role: decoded.role , email: decoded.email};
         next();
     } catch (error) {
         res.status(401).json({ message: "Not authenticated. Invalid or expired token." });

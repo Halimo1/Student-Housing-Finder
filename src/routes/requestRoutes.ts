@@ -1,157 +1,125 @@
-import { Router } from "express"
-import { getListingRequest, cancelRequest, getMyRequest, sendRequest, updateRequestStatus} from '../controllers/requestController'
-import { authMiddleware } from '../middlewares/authMiddleware'
-import { roleMiddleware } from '../middlewares/roleMiddleware'
+import { Router } from "express";
+import { getListingRequest, cancelRequest, getMyRequest, sendRequest, updateRequestStatus } from "../controllers/requestController";
+import { authMiddleware } from "../middlewares/authMiddleware";
+import { roleMiddleware } from "../middlewares/roleMiddleware";
 
 export const requestRouter = Router();
-
 
 /**
  * @swagger
  * /request/showListingRequest:
  *   get:
- *     tags: []
- *     summary: Authenticate then get all listing request 
+ *     summary: Get requests for my listings (Lister only)
+ *     tags:
+ *       - Requests
  *     responses:
  *       200:
- *         description: Get listing request
- *         content: 
- *           application/json:
- *             schema:
- *               $ref:'#/components/schemas/RequestSchema' 
- *       401:
- *         description: Not authenticated.
+ *         description: Returns list of requests for lister listings
  *       403:
- *         description: Forbidden: Access denied
- *       500:
- *         description: Some server error!
+ *         description: Forbidden - Lister role required
  */
-
-
-requestRouter.get('/showListingRequest',authMiddleware,roleMiddleware("Lister"),getListingRequest)
-
+requestRouter.get("/showListingRequest", authMiddleware, roleMiddleware("Lister"), getListingRequest);
 
 /**
  * @swagger
  * /request/showMyRequest:
  *   get:
- *     tags: []
- *     summary: Authenticate then get my listing request 
+ *     summary: Get my sent requests (Seeker only)
+ *     tags:
+ *       - Requests
  *     responses:
  *       200:
- *         description: get my listing request
- *         content: 
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/RequestSchema'
- *       401:
- *         description: Not authenticated.
+ *         description: Returns list of seeker requests
  *       403:
- *         description: Forbidden: Access denied
- *       500:
- *         description: Some server error!
+ *         description: Forbidden - Seeker role required
  */
-
-
-requestRouter.get('/showMyRequest',authMiddleware,roleMiddleware("Seeker"),getMyRequest)
-
+requestRouter.get("/showMyRequest", authMiddleware, roleMiddleware("Seeker"), getMyRequest);
 
 /**
  * @swagger
  * /request/sendRequest:
  *   post:
- *     tags: []
- *     summary: Authenticate then send request 
+ *     summary: Send an interest request for a listing
+ *     tags:
+ *       - Requests
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RequestSchema'
+ *             type: object
+ *             required:
+ *               - listingId
+ *             properties:
+ *               listingId:
+ *                 type: string
+ *                 example: 64f123abc456
  *     responses:
  *       201:
- *         description: created
- *         content: 
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/RequestSchema'
- *       401:
- *         description: Not authenticated.
- *       403:
- *         description: Forbidden: Access denied
- *       500:
- *         description: Some server error!
+ *         description: Send request is done
+ *       400:
+ *         description: Missing listingId or attempting to request own listing
  */
-
-
-requestRouter.post('/sendRequest', authMiddleware, sendRequest);
-
+requestRouter.post("/sendRequest", authMiddleware, sendRequest);
 
 /**
  * @swagger
- * /request/updateRequestStatus:
+ * /request/updateRequestStatus/{id}:
  *   put:
- *     tags: []
- *     summary: Authenticate then update request status
+ *     summary: Accept or decline a request (Lister only)
+ *     tags:
+ *       - Requests
  *     parameters:
  *       - in: path
  *         name: id
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: The id of request you want to update its status
+ *         description: The request ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RequestSchema'
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, accepted, declined]
+ *                 example: accepted
  *     responses:
  *       200:
- *         description:The requet status updated 
- *         content: 
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/RequestSchema'
- *       401:
- *         description: Not authenticated.
- *       403:
- *         description: Forbidden: Access denied
+ *         description: Request status updated
  *       404:
- *         description: Interest request not found
- *       500:
- *         description: Some server error!
+ *         description: Request not found
  */
-
-
-requestRouter.put('/updateRequestStatus/:id',authMiddleware,roleMiddleware("Lister"),updateRequestStatus)
-
+requestRouter.put("/updateRequestStatus/:id", authMiddleware, roleMiddleware("Lister"), updateRequestStatus);
 
 /**
  * @swagger
  * /request/cancelRequest:
  *   delete:
- *     tags: []
- *     summary: Authenticate then cancel request 
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: The id of request you want to cancel
+ *     summary: Cancel a sent request (Seeker only)
+ *     tags:
+ *       - Requests
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - listingId
+ *             properties:
+ *               listingId:
+ *                 type: string
+ *                 example: 64f123abc456
  *     responses:
  *       200:
- *         description:The requet canceled
- *       401:
- *         description: Not authenticated.
- *       403:
- *         description: Forbidden: Access denied
+ *         description: Interest request cancelled successfully
  *       404:
  *         description: Interest request not found
- *       500:
- *         description: Some server error!
  */
-
-
-requestRouter.delete('/cancelRequest/:id',authMiddleware,roleMiddleware("Seeker"),cancelRequest)
+requestRouter.delete("/cancelRequest", authMiddleware, roleMiddleware("Seeker"), cancelRequest);

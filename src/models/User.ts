@@ -32,7 +32,7 @@ export enum UserRole {
  *           enum: [Lister, Seeker]
  *           description: The role of user
  *       example:
- *         fullName: "Youseef Ezzat Mohamed Ahmed"
+ *         fullName: "Youssef tamer abdelaziz"
  *         email: "user@example.com"
  *         password: "12345678"
  *         role: "Seeker"

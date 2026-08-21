@@ -50,7 +50,8 @@ export async function signIn(req: Request, res: Response) {
 
     const token = generateToken({
         _id: user._id.toString(),
-        email: user.email
+        email: user.email,
+        role: user.role
     });
     res.cookie('token', token, {
         httpOnly: true,

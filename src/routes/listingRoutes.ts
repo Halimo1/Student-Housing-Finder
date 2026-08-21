@@ -1,40 +1,60 @@
 import { Router } from "express";
-import { getAllListing , createListing , updateListing , deleteListing} from "../controllers/listingController"
-import { validateListingInput } from "../middlewares/validationMiddleware"
-import { roleMiddleware } from "../middlewares/roleMiddleware"
-import { authMiddleware } from "../middlewares/authMiddleware"
+import { getAllListing, createListing, updateListing, deleteListing } from "../controllers/listingController";
+import { validateListingInput } from "../middlewares/validationMiddleware";
+import { roleMiddleware } from "../middlewares/roleMiddleware";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 export const listingRouter = Router();
-
 
 /**
  * @swagger
  * /listing/showAllListing:
  *   get:
- *     tags: []
- *     summary: Authenticate then get all listing
+ *     summary: Get all listings with optional filters
+ *     tags:
+ *       - Listings
+ *     parameters:
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Filter by location
+ *       - in: query
+ *         name: mnPrice
+ *         schema:
+ *           type: number
+ *         description: Minimum price
+ *       - in: query
+ *         name: mxPrice
+ *         schema:
+ *           type: number
+ *         description: Maximum price
+ *       - in: query
+ *         name: roomsAvailable
+ *         schema:
+ *           type: number
+ *         description: Exact number of available rooms
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, accepted, declined]
+ *         description: Filter listings by request status
  *     responses:
  *       200:
- *         description: A list of listings
- *          content: 
- *           application/json:
- *             schema:
- *               $ref:'#/components/schemas/listingSchema'
- *       401:
- *         description: Not authenticated. No token provided.
+ *         description: List of filtered listings
  *       500:
- *         description: Server Error
+ *         description: Error filtering listing
  */
-
-listingRouter.get('/showAllListing',authMiddleware,getAllListing)
-
+listingRouter.get("/showAllListing", authMiddleware, getAllListing);
 
 /**
  * @swagger
  * /listing/createListing:
  *   post:
- *     tags: []
- *     summary: Authenticate then check user role then validate listing input then creat listing 
+ *     summary: Create a new listing (Lister only)
+ *     tags:
+ *       - Listings
  *     requestBody:
  *       required: true
  *       content:
@@ -43,35 +63,28 @@ listingRouter.get('/showAllListing',authMiddleware,getAllListing)
  *             $ref: '#/components/schemas/listingSchema'
  *     responses:
  *       201:
- *         description: New Listing created successfully 
- *           content:
- *             application/json:
- *               schema:
- *                 $ref: '#/components/schemas/listingSchema'
- *       401:
- *         description: Unauthorized: User not authenticated
+ *         description: New Listing created successfully
+ *       400:
+ *         description: Missing or invalid fields
  *       403:
- *         description: Forbidden: Access denied
- *       500:
- *         description: Some server error!
+ *         description: Forbidden - Requires Lister role
  */
-
-listingRouter.post('/createListing',authMiddleware,roleMiddleware("Lister"),validateListingInput,createListing)
-
+listingRouter.post("/createListing", authMiddleware, roleMiddleware("Lister"), validateListingInput, createListing);
 
 /**
  * @swagger
- * '/listing/updateListing/{id}:
- *   post:
- *     tags: []
- *     summary: Authenticate then check user role then validate listing input then update listing 
+ * /listing/updateListing/{id}:
+ *   put:
+ *     summary: Update an existing listing (Lister only)
+ *     tags:
+ *       - Listings
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: number
  *         required: true
- *         description: The id of listing you want to update
+ *         schema:
+ *           type: string
+ *         description: The listing ID
  *     requestBody:
  *       required: true
  *       content:
@@ -80,49 +93,34 @@ listingRouter.post('/createListing',authMiddleware,roleMiddleware("Lister"),vali
  *             $ref: '#/components/schemas/listingSchema'
  *     responses:
  *       200:
- *         description: Listing update successfully
- *         content: 
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/listingSchema'
- *       400:
- *         description: some problem in input
- *       401:
- *         description: Not authenticated.
+ *         description: Listing updated successfully
  *       403:
- *         description: Forbidden: Access denied
+ *         description: Unauthorized to update this listing
  *       404:
  *         description: Listing not found
- *       500:
- *         description: Some server error!
  */
-
-listingRouter.put('/updateListing/:id',authMiddleware,roleMiddleware("Lister"),validateListingInput,updateListing)
+listingRouter.put("/updateListing/:id", authMiddleware, roleMiddleware("Lister"), validateListingInput, updateListing);
 
 /**
  * @swagger
- * '/listing/deleteListing/{id}:
+ * /listing/deleteListing/{id}:
  *   delete:
- *     tags: []
- *     summary: Authenticate then check user role then delete listing 
+ *     summary: Delete a listing (Lister only)
+ *     tags:
+ *       - Listings
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: number
  *         required: true
- *         description: The id of listing you want to delete
+ *         schema:
+ *           type: string
+ *         description: The listing ID
  *     responses:
  *       200:
  *         description: Listing deleted successfully
- *       401:
- *         description: Not authenticated.
  *       403:
  *         description: Unauthorized to delete this listing
  *       404:
- *         description: listing nuo found
- *       500:
- *         description: Some server error!
+ *         description: Listing not found
  */
-
-listingRouter.delete('/deleteListing/:id',authMiddleware,roleMiddleware("Lister"),deleteListing)
+listingRouter.delete("/deleteListing/:id", authMiddleware, roleMiddleware("Lister"), deleteListing);
