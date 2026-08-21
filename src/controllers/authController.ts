@@ -34,10 +34,13 @@ export async function signIn(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
 
+<<<<<<< HEAD
+=======
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
 
+>>>>>>> 9eb3b49231377211256c8d345d82dad200dc8831
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
