@@ -29,13 +29,13 @@ export enum UserRole {
  *           description: The password
  *         role:
  *           type: string
- *           enum: [admin, user]
+ *           enum: [Lister, Seeker]
  *           description: The role of user
  *       example:
  *         fullName: "Youseef Ezzat Mohamed Ahmed"
  *         email: "user@example.com"
  *         password: "12345678"
- *         role: "admin"
+ *         role: "Seeker"
  */
 
 const userSchema = new mongoose.Schema({

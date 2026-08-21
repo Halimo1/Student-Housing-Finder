@@ -41,8 +41,8 @@ export const authRouter = Router();
  *                  example: Password@123
  *                role:
  *                  type: string
- *                  enum: [admin, user]
- *                  example: admin
+ *                  enum: [Lister, Seeker]
+ *                  example: Seeker
  *
  *      responses:
  *        '201':

@@ -10,13 +10,13 @@ import { authRouter } from "./routes/authRoutes";
 
 const app = express();
 const PORT = process.env.PORT;
+app.use(express.json());
+app.use(cookieParser());
 app.use('/listing',listingRouter);
 app.use('/request',requestRouter);
 app.use('/auth',authRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(Specs));
-app.use(express.json());
-app.use(cookieParser());
 
 connectDB();
 
