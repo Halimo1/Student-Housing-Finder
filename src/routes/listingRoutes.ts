@@ -9,8 +9,9 @@ export const listingRouter = Router();
 
 /**
  * @swagger
- * /listing:
+ * /listing/showAllListing:
  *   get:
+ *     tags: []
  *     summary: Authenticate then get all listing
  *     responses:
  *       200:
@@ -25,12 +26,12 @@ export const listingRouter = Router();
  *         description: Server Error
  */
 
-listingRouter.get('/',authMiddleware,getAllListing)
+listingRouter.get('/showAllListing',authMiddleware,getAllListing)
 
 
 /**
  * @swagger
- * /listing:
+ * /listing/createListing:
  *   post:
  *     tags: []
  *     summary: Authenticate then check user role then validate listing input then creat listing 
@@ -55,12 +56,12 @@ listingRouter.get('/',authMiddleware,getAllListing)
  *         description: Some server error!
  */
 
-listingRouter.post('/',authMiddleware,roleMiddleware("Lister"),validateListingInput,createListing)
+listingRouter.post('/createListing',authMiddleware,roleMiddleware("Lister"),validateListingInput,createListing)
 
 
 /**
  * @swagger
- * '/listing:
+ * '/listing/updateListing/{id}:
  *   post:
  *     tags: []
  *     summary: Authenticate then check user role then validate listing input then update listing 
@@ -96,11 +97,11 @@ listingRouter.post('/',authMiddleware,roleMiddleware("Lister"),validateListingIn
  *         description: Some server error!
  */
 
-listingRouter.put('/:id',authMiddleware,roleMiddleware("Lister"),validateListingInput,updateListing)
+listingRouter.put('/updateListing/:id',authMiddleware,roleMiddleware("Lister"),validateListingInput,updateListing)
 
 /**
  * @swagger
- * '/listing:
+ * '/listing/deleteListing/{id}:
  *   delete:
  *     tags: []
  *     summary: Authenticate then check user role then delete listing 
@@ -124,4 +125,4 @@ listingRouter.put('/:id',authMiddleware,roleMiddleware("Lister"),validateListing
  *         description: Some server error!
  */
 
-listingRouter.delete('/:id',authMiddleware,roleMiddleware("Lister"),deleteListing)
+listingRouter.delete('/deleteListing/:id',authMiddleware,roleMiddleware("Lister"),deleteListing)

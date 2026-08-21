@@ -34,13 +34,10 @@ export async function signIn(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
 
-<<<<<<< HEAD
-=======
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
 
->>>>>>> 9eb3b49231377211256c8d345d82dad200dc8831
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
@@ -67,4 +64,9 @@ export async function signIn(req: Request, res: Response) {
   } catch{
     return res.status(500).json({ error: 'Error logging in'});
   }
+}
+
+export function signOut(req: Request, res: Response) { 
+  res.clearCookie("token");
+  return res.status(200).json({message: "Logged out successfully"});
 }

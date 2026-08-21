@@ -6,6 +6,39 @@ export enum RequestStatus {
     DECLINED = "declined",
 };
 
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RequestSchema:
+ *       type: object
+ *       required:
+ *         - listingId
+ *         - listerId
+ *         - seekerId
+ *         - status
+ *       properties:
+ *         listingId:
+ *           type: string
+ *           description: []
+ *         listerId:
+ *           type: string
+ *           description: []
+ *         seekerId:
+ *           type: string
+ *           description: []
+ *         status:
+ *           type: string
+ *           enum: [ pending , accepted , declined ]
+ *           description: []
+ *       example:
+ *         listingId: 1111
+ *         listerId: 2222
+ *         seekerId: 3333
+ *         status: pending
+ */
+
 const RequestSchema = new mongoose.Schema({
     listingId: {
         type: String, 
