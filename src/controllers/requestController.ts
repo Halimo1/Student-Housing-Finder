@@ -8,7 +8,14 @@ export async function sendRequest(req: Request, res: Response) {
         const seekerId = req.user!.id;
         const mylisting = await Listing.findById(listingId);
         if (!listingId) {
-            return res.status(400).json({ message: `Listing id must by provided` });
+            return res.status(400).json({ message: "Listing id must by provided" });
+        }
+        const _Request = await ListingRequest.findOne({
+            listingId,
+            seekerId
+        });
+        if (_Request) {
+            return res.status(400).json({ message: "You already have sent request to this listing before" });
         }
         const request = await ListingRequest.create({
             listingId,
