@@ -60,7 +60,7 @@ requestRouter.get("/showMyRequest", authMiddleware, roleMiddleware("Seeker"), ge
  *       400:
  *         description: Missing listingId or attempting to request own listing
  */
-requestRouter.post("/sendRequest", authMiddleware, sendRequest);
+requestRouter.post("/sendRequest", authMiddleware, roleMiddleware("Seeker"), sendRequest);
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ requestRouter.post("/sendRequest", authMiddleware, sendRequest);
  *       404:
  *         description: Request not found
  */
-requestRouter.put("/updateRequestStatus/:id", authMiddleware, roleMiddleware("Lister"), updateRequestStatus);
+requestRouter.patch("/updateRequestStatus/:id", authMiddleware, roleMiddleware("Lister"), updateRequestStatus);
 
 /**
  * @swagger

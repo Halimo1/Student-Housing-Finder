@@ -10,11 +10,9 @@ export async function sendRequest(req: Request, res: Response) {
         if (!listingId) {
             return res.status(400).json({ message: `Listing id must by provided` });
         }
-        if (mylisting?.ownerId.toString() === req.user!.id) {
-            return res.status(400).json({ message: "You cannot request your own listing!" });
-        }
         const request = await ListingRequest.create({
             listingId,
+            listerId: mylisting!.ownerId.toString(),
             seekerId
         });
         return res.status(201).json({ message: "Send request is done" });
@@ -28,7 +26,7 @@ export async function getMyRequest(req: Request, res: Response) {
         const allRequests = await ListingRequest.find({ seekerId: req.user!.id });
         return res.status(200).json(allRequests);
     } catch {
-        return res.status(500).json({ error: "Error in get my request request" });
+        return res.status(500).json({ error: "Error in get your request" });
     }
 }
 
@@ -36,8 +34,10 @@ export async function cancelRequest(req: Request, res: Response) {
     try {
         const { listingId } = req.body;
         const seekerId = req.user!.id;
+        const mylisting = await Listing.findById(listingId);
         const deletedRequest = await ListingRequest.findOneAndDelete({
             listingId,
+            listerId: mylisting!.ownerId.toString(),
             seekerId
         });
         if (!deletedRequest) {
@@ -45,7 +45,7 @@ export async function cancelRequest(req: Request, res: Response) {
         }
         return res.status(200).json({ message: "Interest request cancelled successfully" });
     } catch {
-        return res.status(500).json({ error: "Error in cancel request request" });
+        return res.status(500).json({ error: "Error in cancel request" });
     }
 }
 
@@ -56,7 +56,7 @@ export async function getListingRequest(req: Request, res: Response) {
         const myListingRequest = await ListingRequest.find({ listingId: { $in: listerListingIds } });
         return res.status(200).json(myListingRequest);
     } catch {
-        return res.status(500).json({ error: "Error in get listing request request" });
+        return res.status(500).json({ error: "Error in get listing request" });
     }
 }
 
@@ -72,6 +72,6 @@ export async function updateRequestStatus(req: Request, res: Response) {
         await request.save();
         return res.json({ message: `Request ${status} successfully`, data: request });
     } catch {
-        return res.status(500).json({ error: "Error in update request status request" });
+        return res.status(500).json({ error: "Error in update request status" });
     }
 }
