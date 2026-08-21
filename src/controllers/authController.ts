@@ -68,6 +68,10 @@ export async function signIn(req: Request, res: Response) {
 }
 
 export function signOut(req: Request, res: Response) { 
-  res.clearCookie("token");
-  return res.status(200).json({message: "Logged out successfully"});
+  try{
+    res.clearCookie("token");
+    return res.status(200).json({message: "Logged out successfully"});
+  } catch{
+    return res.status(500).json({ error: 'Error signing out'});
+  }
 }

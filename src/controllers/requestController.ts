@@ -28,7 +28,7 @@ export async function getMyRequest(req: Request, res: Response) {
         const allRequests = await ListingRequest.find({ seekerId: req.user!.id });
         return res.status(200).json(allRequests);
     } catch {
-        return res.status(500).json({ error: "Error in send request" });
+        return res.status(500).json({ error: "Error in get my request request" });
     }
 }
 
@@ -45,7 +45,7 @@ export async function cancelRequest(req: Request, res: Response) {
         }
         return res.status(200).json({ message: "Interest request cancelled successfully" });
     } catch {
-        return res.status(500).json({ error: "Error in send request" });
+        return res.status(500).json({ error: "Error in cancel request request" });
     }
 }
 
@@ -56,7 +56,7 @@ export async function getListingRequest(req: Request, res: Response) {
         const myListingRequest = await ListingRequest.find({ listingId: { $in: listerListingIds } });
         return res.status(200).json(myListingRequest);
     } catch {
-        return res.status(500).json({ error: "Error in send request" });
+        return res.status(500).json({ error: "Error in get listing request request" });
     }
 }
 
@@ -72,6 +72,6 @@ export async function updateRequestStatus(req: Request, res: Response) {
         await request.save();
         return res.json({ message: `Request ${status} successfully`, data: request });
     } catch {
-        return res.status(500).json({ error: "Error in send request" });
+        return res.status(500).json({ error: "Error in update request status request" });
     }
 }
