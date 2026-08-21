@@ -10,12 +10,15 @@ import { authRouter } from "./routes/authRoutes";
 
 const app:Application = express();
 const PORT = process.env.PORT;
+
 app.use(express.json());
-setupSwagger(app);
 app.use(cookieParser());
+
 app.use('/listing',listingRouter);
 app.use('/request',requestRouter);
 app.use('/auth',authRouter);
+
+setupSwagger(app);
 
 connectDB();
 

@@ -26,15 +26,11 @@ import mongoose from "mongoose";
  *         description:
  *           type: string
  *           description: Description of house
- *         ownerId:
- *           type: string
- *           description: The id of owner
  *       example:
  *         location: "El Obour"
  *         price: 2000000
  *         roomsAvailable: 3
  *         description: "Beautiful house"
- *         ownerId: 1234
  */
 
 const listingSchema = new mongoose.Schema({
